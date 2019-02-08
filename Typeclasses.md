@@ -3,6 +3,7 @@
 
 Haskell typeclasses are one of the most important and complex features of its type system, that distinguishes Haskell among other well-known functional languages.
 Implementing typeclasees using Code Rules shows that it has expressive power that is sufficient even for the advanced type systems.
+This implementation partly relies on the reference Haskell typechecker[^thih].
 
 _Note about notions: by the word "constraints" are meant Code Rules constraints, whereas typeclass constraints are called in this qualified way ("typeclass constraints"), or with an uppercase letter ("Constraints") to avoid ambiguity._
 
@@ -220,6 +221,8 @@ They're implemented in a way to be triggered automatically, while other rules he
 <!-- .to mention -->
 <!--     aux constraint for 'recover' to avoid unnecessary dependencies -->
 
+[^thih]: See [Mark P. Jones. "Typing Haskell in Haskell"](https://web.cecs.pdx.edu/~mpj/thih/thih.pdf).
 
 <!-- ![](img/)   -->
 <!-- _()_ -->
+
