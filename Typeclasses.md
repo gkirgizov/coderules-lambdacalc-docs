@@ -40,7 +40,7 @@ A set is represented as a number of `set` constraints in the constraint store.
 Each `set` constraint has 2 arguments: the first argument is a free logical variable representing handle for the data structure and the second argument is an element belonging to it.
 As an example, a set `{a, b, d}` (where a, b and d are some dataforms or free logical variables) will be represented as three constraints: `set(S1, a)`, `set(S1, b)` and `set(S1, d)`, where `S1` is a Set handle.
 Programmer can manipulate the set with a handle.
-The implementation consists of a single rule that mantains the set invariant, i.e. that it can't contain two equal elements.
+The implementation consists of a single rule that maintains the set invariant, i.e. that it can't contain two equal elements.
 <!-- Notice that the `equals` predicate is used here. -->
 
 ![](img/set_removeDupl.png)  
@@ -49,7 +49,7 @@ _(set data structure implementation)_
 The beauty of such representation of a set is that merging sets comes essentially for free and, moreover, is performed implicitly.
 To merge two sets a programmer only needs to unify their handles.
 And there one crucial feature of Code Rules enters the picture: constraint reactivation.
-When arguments of inactve constraints in the constraint store change (for example, are unified with something), these constraints are reactivated.
+When arguments of inactive constraints in the constraint store change (for example, are unified with something), these constraints are reactivated.
 
 Consider the following example.
 Assume there're two sets `S1 = {a, b}` and `S2 = {a, c}` and the constraint store contains four constraints representing them: `set(S1, a)`, `set(S1, b)`, `set(S2, a)` and `set(S2, c)`.
@@ -170,7 +170,7 @@ _(generalization over a single type variable: notice activation of `produceTypeC
 _(collected typeclass constraints become part of the type variable definition)_
 
 The constraint `tdefConstraints` is used in an instantiation of a type variable.
-We essentially do the opposite: we copy typeclass constraints from the definiton (`tdefConstraints`) to a new set (in `typeConstraints`) for a freshly instantiated type variable.
+We essentially do the opposite: we copy typeclass constraints from the definition (`tdefConstraints`) to a new set (in `typeConstraints`) for a freshly instantiated type variable.
 
 ![instTypeVars rule](img/instTypeVars.png)  
 _(instantiation of a single type variable: notice activation of `typeConstraints` with a copied set)_

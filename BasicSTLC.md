@@ -1,6 +1,6 @@
-## Typechecking Lambda Calculus with Extentions
+## Typechecking Lambda Calculus with Extensions
 
-Simply Typed Lambda Calculus (STLC) is a famous example favoured by textbook authors.
+Simply Typed Lambda Calculus (STLC) is a famous example favored by textbook authors.
 This sample demonstrates how a classical type checking algorithm (Hindley-Milner[^hm]) designed for this language can be implemented using Code Rules.
 It also presents two substantial extensions to basic Hindley-Milner type inference: type annotations and typeclasses from Haskell.
 They will be discussed in succession, highlighting some of the useful features of Code Rules language and implementation challenges that type system itself introduces.
@@ -72,7 +72,7 @@ For example, in the case of unannotated let-binding we simply generalize over al
 ![typeOf_LetVarBind rule](img/typeOf_LetVarBind.png)  
 _(typing rule for a let-binding)_
 
-In the typing rule for variable occurences they are instantiated with a help of `inst` constraint.
+In the typing rule for variable occurrences they are instantiated with a help of `inst` constraint.
 It also returns a list of fresh instantiated variables.
 This rule ensures that terms with universal types can actually be used polymorphically.
 
@@ -117,7 +117,7 @@ _(rule for a type generalization)_
 Generalization of a single free type variable consists from two steps.
 The first step is concerned with typeclass constraints on type variables, and will be explained in the corresponding section below.
 In short, we need to get the type constraints, that the type variable collected during type inference, and fix them, because they become a part of the definition of type variable in its type scheme and mustn't change.
-The second step is a substitution of its occurences in the generalized type with references to a fresh type variable playing a role of its definition.
+The second step is a substitution of its occurrences in the generalized type with references to a fresh type variable playing a role of its definition.
 This is accomplished simply by a unification of free type var with `VarRef` data form, pointing to this fresh type var.
 
 ![genTypeVars rule](img/genTypeVars.png)  
@@ -195,4 +195,4 @@ _(recover bound type variable from universal type)_
 
 [^hm]: See for example: Cardelli, Luca. "Basic polymorphic typechecking." Science of computer programming 8.2 (1987): 147-172.
 
-Next, we turn our attention to the extentions to STLC.
+Next, we turn our attention to the extensions to STLC.

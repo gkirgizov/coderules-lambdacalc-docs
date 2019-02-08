@@ -54,7 +54,7 @@ _(annotated expression also includes `subsumed` check)_
 
 In essence, this is all that is special about type annotations.
 Most of the work and complexity is about `subsumed` relation to make the type system more expressive: it is concerned with higher-rank types.
-We can substitute all occurences of `subsumed` constraint for the unification predicate and get a usual STLC with simple type annotations, that must be equivalent to inferred types everywhere.
+We can substitute all occurrences of `subsumed` constraint for the unification predicate and get a usual STLC with simple type annotations, that must be equivalent to inferred types everywhere.
 
 The following discussion is mostly concerned with a description of aspects of the type system and less so with Code Rules.
 
@@ -119,7 +119,7 @@ There're two cases for this, depending on which side of relation the universal t
 Before the check the universal types are instantiated (i.e. type variables in them are substituted for fresh logical variables).
 Then we proceed with recursive subsumption check on these instantiated types.
 The most important part comes after that: we need to check that the types, to which type variables are instantiated, are valid and consistent.
-The required checks differ for these two rules. That's where the assymetric nature of relation manifests itself.
+The required checks differ for these two rules. That's where the asymmetric nature of relation manifests itself.
 For details, the reader can proceed to an example for polymorphic pair types described below or, for a full treatment, to the original paper.[^spjones2007]
 
 ![](img/subsumption_Forall.png)  
