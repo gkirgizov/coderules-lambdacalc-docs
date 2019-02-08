@@ -160,8 +160,6 @@ Rule for a pair type is straightforward.
 ![](img/subsumption_Pair.png)  
 _(subsumption rule for pair type)_
 
-
 That's how implementation of a complex relation on types can look like in Code Rules.
 
-<!-- [^odersky1996] -->
-[^spjones2007]: [Practical type inference for arbitrary-rank types](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/putting.pdf)
+

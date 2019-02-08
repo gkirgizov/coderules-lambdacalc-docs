@@ -206,9 +206,6 @@ The second step is to actually check that the types agree, that is, the type of 
 ![](img/typeOf_PrototypeImpl.png)  
 _(checking correctness of Prototype implementations)_
 
-
-<!-- ##### Conclusion -->
-
 That is everything there is to the typechecking of typeclasses.
 To recap, the most important rules are concerned with processing typeclass constraints.
 They're implemented in a way to be triggered automatically, while other rules heavily rely on this automatic and implicit checking of typeclass constraints.
@@ -220,9 +217,4 @@ They're implemented in a way to be triggered automatically, while other rules he
 <!--         but SHOW recovering Constraints? -->
 <!-- .to mention -->
 <!--     aux constraint for 'recover' to avoid unnecessary dependencies -->
-
-[^thih]: See [Mark P. Jones. "Typing Haskell in Haskell"](https://web.cecs.pdx.edu/~mpj/thih/thih.pdf).
-
-<!-- ![](img/)   -->
-<!-- _()_ -->
 

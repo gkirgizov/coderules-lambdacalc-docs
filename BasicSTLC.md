@@ -192,7 +192,6 @@ _(recover universal type)_
 _(recover bound type variable from universal type)_
     <!-- SHOW FORALL RULES FOR FORALL & RECOVERTYPEVARS -->
 
-
-[^hm]: See for example: Cardelli, Luca. "Basic polymorphic typechecking." Science of computer programming 8.2 (1987): 147-172.
-
 Next, we turn our attention to the extensions to STLC.
+
+
