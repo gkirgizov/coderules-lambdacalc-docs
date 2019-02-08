@@ -1,18 +1,18 @@
-## Typechecking Lambda Calculus
+## Typechecking Lambda Calculus with Extentions
 
 Simply Typed Lambda Calculus (STLC) is a famous example favoured by textbook authors.
-This sample demonstrates how a classical type checking algorithm (Hindley-Milner[^hm]) designed for this language can be implemented using code rules.
+This sample demonstrates how a classical type checking algorithm (Hindley-Milner[^hm]) designed for this language can be implemented using Code Rules.
 It also presents two substantial extensions to basic Hindley-Milner type inference: type annotations and typeclasses from Haskell.
-They will be discussed in succession, highlighting some of the useful features of code rules language and implementation challenges that type system itself introduces.
-These extensions show that even an advanced type system can be implemented using code rules, and in a natural way.
+They will be discussed in succession, highlighting some of the useful features of Code Rules language and implementation challenges that type system itself introduces.
+These extensions show that even an advanced type system can be implemented using Code Rules, and in a natural way rule-based way.
 
-For purposes of keeping this sample small, we keep the language confined to boolean values. Aside of boolean constants `True` and `False`, the mandatory lambda abstraction and application, `let-in` expression, and `if-then-else`, we have in addition defined pairs of values and `fix` operator to support recursion.
+For purposes of keeping this sample a bit simpler, we keep the language confined to boolean values. Aside of boolean constants `True` and `False`, the mandatory lambda abstraction and application, `let-in` expression, and `if-then-else`, we have in addition defined pairs of values and `fix` operator to support recursion.
 
 The syntax of presented lambda calculus is compatible with Haskell, and consequently all examples can be typechecked with, for example, GHC (Glasgow Haskell Compiler).
 The required extensions for GHC are:
-- For basic STLC: `UnicodeSyntax` and `ExplicitForAll`
-- For type annotations: `ScopedTypeVariables` and `RankNTypes`
-- For typeclasses: `FlexibleInstances`
+- for basic STLC: `UnicodeSyntax` and `ExplicitForAll`;
+- for STLC with type annotations: additionally, `ScopedTypeVariables` and `RankNTypes`;
+- for STLC with typeclasses: additionally, `FlexibleInstances`.
 <!-- -- `OverlappingInstances` (optional) -->
 
 <!-- ~some disclaimer: why typing rules may be different from more traditional type formulations, see below -->
@@ -50,7 +50,9 @@ _(single rule implementing cons-list)_
 #### Main Typechecking Rules
 
 Handler `typeOf` contains most of the type inference rules.
-Besides `typeOf` constraint it also declares a helper constraint `newTypeVars`. Its role is simple, it collects newly introduced type variables for later generalization on let-bindings.
+Besides `typeOf` constraint it also declares a helper constraint `newTypeVars`.
+Its role is simple, it collects newly introduced type variables.
+It is needed for later generalization on let-bindings.
 Type variables are introduced at lambda-bindings and at instantiations of universal types.
 Fresh type variables are represented simply by fresh logical variables.
 For example, this is a rule for lambda-bindings:
@@ -91,7 +93,7 @@ In the basic STLC formulation we would have here a usual unification between par
 ![typeOf_App rule](img/typeOf_App.png)  
 _(typing rule for function application)_
 
-Finally, the `fix` operator, which represents general recursion, is given the type `∀ a. (a → a) → a`.
+Finally, the `fix` operator, which represents general recursion, is given the type `∀a. (a → a) → a`.
 <!-- `forall a. (a -> a) -> a`. -->
 
 ![typeOf_Fix rule](img/typeOf_Fix.png)  
@@ -145,6 +147,7 @@ For example, generalizing a type `Fun(arg: A res: B)`, where `A` and `B` are fre
 Instantiation of a universal type mirrors generalization of a type.
 `inst` constraint also depends on the form of a type being instantiated.
 There're two cases: the trivial case, when the instantiated type is not a universal type, and the common case, when the instantiated type is really a universal type.
+
 In the former case we essentially do nothing, and return the same type and an empty list of instantiated type variables.
 
 ![inst_dummy rule](img/inst_dummy.png)  
@@ -191,3 +194,5 @@ _(recover bound type variable from universal type)_
 
 
 [^hm]: See for example: Cardelli, Luca. "Basic polymorphic typechecking." Science of computer programming 8.2 (1987): 147-172.
+
+Next, we turn our attention to the extentions to STLC.
