@@ -1,18 +1,18 @@
 
-#### Typeclasses
+### Typeclasses
 
 Haskell typeclasses are one of the most important and complex features of its type system, that distinguishes Haskell among other well-known functional languages.
 Implementing typeclasees using Code Rules shows that it has expressive power that is sufficient even for the advanced type systems.
 
-Note about notions: by the word "constraints" are meant Code Rules constraints, whereas typeclass constraints are called in this qualified way ("typeclass constraints"), or with an uppercase letter ("Constraints") to avoid ambiguity.
+_Note about notions: by the word "constraints" are meant Code Rules constraints, whereas typeclass constraints are called in this qualified way ("typeclass constraints"), or with an uppercase letter ("Constraints") to avoid ambiguity._
 
 
-##### Typeclass Constraints
+#### Typeclass Constraints
 
 In essence, typeclasses extend type system by adding a kind of requirements, Constraints on type variables that are bound by universal quantifier.
 Type system needs to carefully track that universal types are instantiated only to the types satisfying their Constraints, and that the types are generalized to universal types properly, without leaving out any Constraints.
 
-For example, we can instantiate a universal type `∀ a.(C1 a, C2 a)⇒ (a, a) → a` only to a type that satisfies both Constraints `C1` and `C2`.
+For example, we can instantiate a universal type `∀ a. (C1 a, C2 a) ⇒ (a, a) → a` only to a type that satisfies both Constraints `C1` and `C2`.
 Or, in case of a generalization, given a function `mappend ∷ ∀ a. Monoid a ⇒ a → a → a`, for a function `f` in `let f = (\x → mappend x x)` we must infer a type `∀ t. Monoid t ⇒ t → t`.
 
 Everything else is mostly a matter of other language aspects (structure, editor and constraints aspects) and not of a type system.
@@ -32,12 +32,12 @@ The major part of typechecking typeclasses is placed in several new handlers:
 Now, let's move through these handlers.
 
 
-##### Set Data Structure
+#### Set Data Structure
 
 Handler `set` implements the Set data structure together with several utility functions.
 A set is represented as a number of `set` constraints in the constraint store.
 Each `set` constraint has 2 arguments: the first argument is a free logical variable representing handle for the data structure and the second argument is an element belonging to it.
-As an example, a set `{ a, b, d }` (where a, b and d are some dataforms or free logical variables) will be represented as three constraints: `set(S1, a)`, `set(S1, b)` and `set(S1, d)`, where `S1` is a Set handle.
+As an example, a set `{a, b, d}` (where a, b and d are some dataforms or free logical variables) will be represented as three constraints: `set(S1, a)`, `set(S1, b)` and `set(S1, d)`, where `S1` is a Set handle.
 Programmer can manipulate the set with a handle.
 The implementation consists of a single rule that mantains the set invariant, i.e. that it can't contain two equal elements.
 <!-- Notice that the `equals` predicate is used here. -->
@@ -56,7 +56,7 @@ Next, unification of logical variables `S1` and `S2` happens (`S1 = S2`).
 Due to automatic reactivation, all inactive constraints in the store that refer to these unified variables will be activated again.
 Because of this they will be tested for matching on the rule maintaining set invariant.
 In this particular case it will be triggered on the constraints `set(S1, a)` and `set(S2, a)` (remember, here `S1=S2`) and discard one of them.
-After this constraint store will contain only three `set` constraints (`set(S1, a)`, `set(S1, b)` and `set(S1, c)`), representing the result of merging `{a, b}` and `{a, c}` --- a set `{a, b, c}`.
+After this constraint store will contain only three `set` constraints (`set(S1, a)`, `set(S1, b)` and `set(S1, c)`), representing the result of merging `{a, b}` and `{a, c}`, a set `{a, b, c}`.
 The implementation of a set is also an example of one useful Code Rules pattern: maintaining some invariant assumed by other rules using a top-level rule, that will be matched first and ensure invariant.
 
 Handler `set` also declares several utility functions with straightforward implementations:
@@ -72,7 +72,7 @@ _(copy a set)_
 _(test whether one set is a subset of another)_
 
 
-##### Representation of Typeclass Constraints
+#### Representation of Typeclass Constraints
 
 Typeclass constraints are used in 2 roles during type checking: in definitions of type variables bound by quantifiers and as requirements on types.
 Handler `typeConstraints` declares 2 constraints that correspond to these 2 roles: `tdefConstraints` and `typeConstraints`.
@@ -100,7 +100,7 @@ But what we further need to do with this set of typeclass constraints depends on
 There're two cases: it either remains free until the point of generalization (i.e. let-binding) or it is bound to a type.
 
 
-##### Checking Typeclass Constraints
+#### Checking Typeclass Constraints
 
 When free type variable becomes bound to something, we need to check that all typeclass constraints collected up to this point are satisfied.
 Due to constraint reactivation, another rule that starts this check will be triggered.
@@ -114,7 +114,7 @@ The cases differ and require different checks.
 ![](img/checkVarConstraints.png)  
 _(check collected typeclass constraints for a type variable: 2 cases)_
 
-####### Strength Check
+##### Strength Check
 
 First, let's consider a slightly less obvious case of a type variable reference.
 It refers to a type variable bound by some universal quantifier, and so, as part of its definition, has its own set of typeclass constraints.
@@ -126,10 +126,9 @@ It can be done with a `isSubset` check.
 ![](img/strengthCheck.png)  
 _(strength check: checking the restrictiveness of two Constraint sets)_
 
-For example, given a function application `f x` with types `x ∷ C1 t ⇒ t` (`t` is bound somewhere) and `f ∷ ∀ a.(C1 a, C2 a) ⇒ a → a` it is clear, that it is ill-formed.
-The strength check will fail, because the Constraints set `{C1}` on the type variable `t` _is not more restrictive_ than the set `{C1, C2}`. The set `{C1, C2}` is not a subset of `{C1}`.
+For example, given a function application `f x` with types `x ∷ C1 t ⇒ t` (`t` is bound somewhere else) and `f ∷ ∀ a.(C1 a, C2 a) ⇒ a → a`, the strength check will clearly fail, because the Constraints set `{C1}` on the type variable `t` _is not more restrictive_ than the set `{C1, C2}`. The set `{C1, C2}` is not a subset of `{C1}`.
 
-####### Instance Check
+##### Instance Check
 
 The second case of a usual type is more intuitive and more common, but its implementation is a bit more involved.
 The first two rules in it do nothing special: the first makes a list out of the set and the second traverses it, triggering actual instance check for each typeclass constraint on a type.
@@ -144,7 +143,8 @@ For example, Haskell has the following instance of `Monoid` typeclass: `instance
 That's why we need to try instantiating the type scheme from instance declaration to the type in question.
 It is done with a combination of `inst` constraint and unification.
 It's important to note, that instantiation here may trigger recursive `instanceCheck`.
-For example, consider how `instanceCheck( Pair(Bool, Bool), {Constraint(Monoid)} )` proceeds in presence of `instance Monoid Bool` and `instance (Monoid a, Monoid b) => Monoid (a, b)` in a program.
+
+For example, consider how `instanceCheck(Pair(Bool, Bool), {Monoid})` proceeds in presence of `instance Monoid Bool` and `instance (Monoid a, Monoid b) => Monoid (a, b)` in a program.
 Here we first need to find an instance for pairs, and then additionally check its own Constraints: that there exist instances for both element types of a pair. The type `(Bool, Bool)` satisfies this requirement given these 2 instances.
 
 The last rule simply fails in case when no matching instance is found.
@@ -156,7 +156,7 @@ Of course, it isn't the best mechanism for reporting type system errors, but it'
 _(instance check: searching for a typeclass instance for a type)_
 
 
-##### Universal Types and Typeclass Constraints
+#### Universal Types and Typeclass Constraints
 
 Typeclasses require only a little change to `forall` handler.
 In the rule for generalization of a type variable we have to add only a single production that moves collected typeclass constraints (in `typeConstraints`) to a definition (`tdefConstraints`).
@@ -176,7 +176,7 @@ _(instantiation of a single type variable: notice activation of `typeConstraints
 <!-- _(notice activation of `typeConstraints` with a copied set)_ -->
 
 
-##### Typeclass and Instance Declarations
+#### Typeclass and Instance Declarations
 
 Handler `typeclasses` extends `annotation` handler and declares no new constraints.
 It ensures the well-formedness of typeclass and instance declarations, and defines typechecking dependencies using `require` statements.
